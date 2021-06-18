@@ -1,0 +1,9 @@
+version: '3'
+services:
+  envoy:
+    image: envoyproxy/envoy-alpine:v1.14.1
+    ports:
+      - 8086:8080
+      - 5555:8088
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml

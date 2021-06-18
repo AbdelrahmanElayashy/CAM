@@ -1,0 +1,15 @@
+include:
+  - project: cm-tm/cm-team/2-4.devops/pipeline-tpl-cluster
+    ref: "master"
+    file : base.yaml
+  - project: cm-tm/cm-team/2-4.devops/pipeline-tpl-cluster
+    ref: "master"
+    file : image.yaml
+  - project: cm-tm/cm-team/2-4.devops/pipeline-tpl-cluster
+    ref: "master"
+    file : deploy.yaml
+  - project: cm-tm/cm-team/2-4.devops/pipeline-tpl-cluster
+    ref: "master"
+    file : nodejs.yaml
+  - local: 'variables.yaml'
+  

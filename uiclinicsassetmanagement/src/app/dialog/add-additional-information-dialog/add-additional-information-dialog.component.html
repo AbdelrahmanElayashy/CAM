@@ -1,0 +1,28 @@
+
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">Add Additional Information</h1>
+  </header>
+
+    <mat-dialog-content class="mat-typography">
+
+      <mat-form-field style="width: 100%;">
+        <mat-label>Add Addition Information</mat-label>
+        <textarea [(ngModel)]="addInfo" matInput placeholder="Ex. some scraper at screen..."></textarea>
+      </mat-form-field>
+
+<!--      <input matInput [(ngModel)]="addInfo" [value]="addInfo" placeholder="type here...">-->
+
+
+<!--      <label for="addInfo">Additional information:</label>-->
+<!--      <input type="text" id="addInfo" name="addInfo" size="32" (change)="infoUpdated($event)">-->
+
+    </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button id="modal-cancel-button" style="margin-right: 20px;" (click)="closeModal()">Cancel</button>
+    <button mat-raised-button id="modal-action-button" (click)="actionFunction()">OK</button>
+  </mat-dialog-actions>
+  <footer id="modal-footer" style="    margin-top: 28px; text-align: right;">
+
+  </footer>
+</div>

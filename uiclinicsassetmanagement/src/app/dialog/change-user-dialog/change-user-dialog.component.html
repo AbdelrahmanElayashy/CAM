@@ -1,0 +1,23 @@
+
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">Change Userlevel</h1>
+  </header>
+  <section id="modal-body">
+
+    <mat-form-field style="width: 100%">
+      <mat-label>username</mat-label>
+      <input matInput [(ngModel)]="username"/>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%">
+      <mat-label>password</mat-label>
+      <input matInput [(ngModel)]="password" (keydown.enter)="actionFunction()" type="password" />
+    </mat-form-field>
+
+  </section>
+  <footer id="modal-footer" style="    margin-top: 28px; text-align: right;">
+    <button mat-raised-button id="modal-cancel-button" style="margin-right: 20px;" (click)="closeModal()">Cancel</button>
+    <button mat-raised-button id="modal-action-button" (click)="actionFunction()">OK</button>
+  </footer>
+</div>

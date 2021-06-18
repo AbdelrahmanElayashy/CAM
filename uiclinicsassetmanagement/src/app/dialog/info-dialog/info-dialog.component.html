@@ -1,0 +1,16 @@
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">{{ data.title }}</h1>
+  </header>
+  <section id="modal-body">
+    <p>{{ data.description }}</p>
+  </section>
+  <footer id="modal-footer" style="margin-top: 28px; text-align: right;">
+    <button *ngIf="data.showOkButton" mat-raised-button id="modal-action-button" (click)="okFunction()">
+      {{ data.actionButtonText }}
+    </button>
+    <button *ngIf="data.showCancelButton" mat-raised-button id="modal-cancel-button" (click)="cancelFunction()">
+      {{ data.cancelButtonText }}
+    </button>
+  </footer>
+</div>

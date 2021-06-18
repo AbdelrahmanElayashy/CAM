@@ -1,0 +1,2 @@
+variables:
+    NPM_INSTALL_CLI_OPTIONS: "--prefix src"

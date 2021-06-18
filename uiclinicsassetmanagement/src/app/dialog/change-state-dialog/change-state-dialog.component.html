@@ -1,0 +1,30 @@
+
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">Change State</h1>
+  </header>
+  <section id="modal-body">
+
+    <div>
+      <label>Current Status:</label>
+      <label id="currentStateLabel" style="margin-left: 30px;">{{state.state}}</label>
+    </div>
+
+    <div style="display: flex;">
+
+      <label>Next Status:</label>
+
+      <div style="margin-left: 20px;">
+        <select (change)="selectOption($event)"
+                [(ngModel)]="selected">
+          <option [value]="item.id" *ngFor="let item of nextStates">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+
+  </section>
+  <footer id="modal-footer" style="    margin-top: 28px; text-align: right;">
+    <button mat-raised-button id="modal-cancel-button" style="margin-right: 20px;" (click)="closeModal()">Cancel</button>
+    <button mat-raised-button id="modal-action-button" (click)="actionFunction()">OK</button>
+  </footer>
+</div>

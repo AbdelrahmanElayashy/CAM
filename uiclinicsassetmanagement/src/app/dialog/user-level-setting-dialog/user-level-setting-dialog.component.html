@@ -1,0 +1,59 @@
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Select User Type</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="typeControl" (selectionChange)="changedType($event.value)" >
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let type of types" [value]="type">
+            {{type}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext (click)="nextStepRanks()">Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" label="Fill out your address">
+    <form [formGroup]="secondFormGroup">
+
+      <button mat-raised-button color="primary" class="mt-40" (click)="addNewRank()">
+        Add New Rank <i class="material-icons">add_circle_outline</i>
+      </button>
+
+      <div cdkDropList class="example-list mt-20" (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let data of ranks, index as i" cdkDrag>
+          <div class="drag-index">{{i+1}}</div>
+          <div class="w-10 drag-icon">
+            <i class="material-icons">reorder</i>
+          </div>
+          <div class="w-100 drag-content">
+            <mat-label>{{data.rank}}</mat-label>
+          </div>
+          <div class="w-10 delete-icon">
+            <button mat-icon-button>
+              <i class="material-icons">delete_outline</i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext (click)="saveRanks()">Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

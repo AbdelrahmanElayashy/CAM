@@ -1,0 +1,152 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.example.demo.grpc;
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+
+service StateService {
+  rpc initialState(InitialStateRequest) returns (google.protobuf.Empty);
+  rpc removeState(StandardRequest) returns (google.protobuf.Empty);
+  rpc deleteHistory(StandardRequest) returns (google.protobuf.Empty);
+  rpc state(StandardRequest) returns (StateResponse);
+  rpc history(HistoryRequest) returns (HistoryResponse);
+  rpc change(ChangeRequest) returns (google.protobuf.Empty);
+  rpc setPriority(SetPriorityRequest) returns (google.protobuf.Empty);
+  rpc setAvailability(SetAvailabilityRequest) returns (google.protobuf.Empty);
+  rpc additionalInformation(AdditionalInformationRequest) returns (google.protobuf.Empty);
+  rpc possibleNextStates(StandardRequest) returns (StatesResponse);
+  rpc getStatesByIds(StatesByIdRequest) returns (StatesByIdResponse);
+}
+
+message StatesByIdRequest {
+  repeated string deviceUUID = 1;
+  string userUUID = 2;
+  repeated GRPCState state = 3;
+  google.protobuf.Timestamp fromDate = 4;
+  google.protobuf.Timestamp toDate = 5;
+  GRPCDefectPriority defectPriority = 6;
+
+}
+
+message StatesByIdResponse {
+  repeated StateResponse state= 1;
+}
+
+message StandardRequest {
+  string deviceUUID = 1;
+  string userUUID = 2;
+}
+
+message InitialStateRequest {
+  string deviceUUID = 1;
+  string userUUID = 2;
+  GRPCState newState = 3;
+}
+
+
+message StateResponse {
+  string deviceUUID = 1;
+  GRPCDefectPriority defectPriority = 2;
+  GRPCState deviceState = 3;
+  string enteredByUserUUID = 4;
+  google.protobuf.Timestamp changeTime = 5;
+  google.protobuf.Timestamp availabilityDate = 6;
+  repeated AdditionalInformationGRPC additionalInformation = 7;
+}
+
+message HistoryRequest {
+  string deviceUUID = 1;
+  string userUUID = 2;
+  google.protobuf.Timestamp fromDate = 3;
+  google.protobuf.Timestamp toDate = 4;
+}
+
+message HistoryResponse {
+  string deviceUUID = 1;
+  repeated StateOutputGRPC change = 2;
+}
+
+message AdditionalInformationGRPC {
+  string userUUID = 1;
+  google.protobuf.Timestamp changeTime = 2;
+  string information = 3;
+}
+
+message StateOutputGRPC {
+  GRPCState deviceState = 1;
+  string enteredByUserUUID = 2;
+  google.protobuf.Timestamp changeTime = 3;
+  google.protobuf.Timestamp availabilityDate = 4;
+  repeated AdditionalInformationGRPC additionalInformation = 5;
+}
+
+
+
+message ChangeRequest {
+  string deviceUUID = 1;
+  string userUUID = 2;
+  GRPCState newState = 3;
+}
+
+
+
+message SetPriorityRequest {
+  string userUUID = 1;
+  string deviceUUID = 2;
+  GRPCDefectPriority newPriority = 3;
+}
+
+
+message SetAvailabilityRequest {
+  string userUUID = 1;
+  string deviceUUID = 2;
+  google.protobuf.Timestamp availabilityDate = 3;
+}
+
+
+message AdditionalInformationRequest {
+  string userUUID = 1;
+  string deviceUUID = 2;
+  string additionalInformation = 3;
+}
+
+message StatesResponse {
+  repeated GRPCState possibleState = 1;
+}
+
+enum GRPCState {
+  NO_STATE = 0;
+  BOUGHT = 1;
+  AVAILABLE = 2;
+  RESERVED = 3;
+  IN_USE = 4;
+  CLEANING = 5;
+  DEFECT_INSPECTION = 6;
+  MAINTENANCE = 7;
+  DEFECT_NO_REPAIR = 8;
+  DISPOSED = 9;
+  DEFECT_EXTERNAL_REPAIR = 10;
+  DEFECT_OWN_REPAIR = 11;
+}
+
+
+enum GRPCDefectPriority {
+  NO_PRIORITY = 0;
+  LOW = 1;
+  MEDIUM = 2;
+  HIGH = 3;
+}
+
+message ErrorResponse {
+ ErrorCode errorCode = 1;
+}
+
+enum ErrorCode {
+  UNSPECIFIED_EXCEPTION = 0;
+  INCORRECT_ATTRIBUTE_EXCEPTION = 1;
+  STATE_EXCEPTION = 2;
+  USER_EXCEPTION = 3;
+  DEVICE_EXCEPTION = 4;
+  CONNECTION_EXCEPTION = 5;
+}

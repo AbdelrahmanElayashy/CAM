@@ -1,0 +1,66 @@
+table {
+  width: 100%;
+}
+
+
+
+.row-button {
+  margin: 0px 4px 8px 4px;
+}
+
+mat-form-field.dropdown {
+  margin: 4px 4px 0px 4px;
+}
+
+tr.example-detail-row {
+  height: 0;
+  background-color: #efefef;
+}
+
+tr.example-element-row:not(.example-expanded-row) {
+  background-color: white;
+}
+
+tr.example-element-row {
+  background-color: #efefef;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}

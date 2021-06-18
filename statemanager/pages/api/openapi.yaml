@@ -1,0 +1,674 @@
+openapi: 3.0.0
+info:
+  description: "REST API for the Management of State Microservice"
+  version: "1.0.0"
+  title: "Management of State Microservice REST API"
+  contact:
+    name: Felix Rohn
+    email: "felix.rohn@student.kit.edu"
+  license:
+    name: "Apache 2.0"
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /stateHandler/addInitialState:
+    post:
+      summary: "Adds an initial state to a medical device with no state"
+      description: ""
+      parameters:
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: "string"
+                  format: "uuid"
+                  example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                  description: "The ID of the medical device"
+                state:
+                  type: "string"
+                  example: "BOUGHT"
+                  description: "The initial state of the new device, if not given will be set as default (AVAILABLE)"
+      responses:
+        200:
+          description: "Success, initial device state was added"
+          content:
+            application/json:
+              schema:
+                type: "string"
+                format: "uuid"
+                example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                description: "The ID of the medical device"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to add an initial state"
+        409:
+          description: "The medical device already has a state or does not exist in medical device database"
+        422:
+          description: "Not all required attributes are given"
+
+  /stateHandler/removeState/{deviceId}:
+    post:
+      summary: "Remove the state from the medical device"
+      description: "Medical device has no state afterwards"
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The ID of the medical device"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      responses:
+        200:
+          description: "Success, state was removed"
+          content:
+            application/json:
+              schema:
+                type: "string"
+                format: "uuid"
+                example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                description: "The ID of the medical device"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to remove state"
+        409:
+          description: "The medical device does not have a state or does not exist in medical device database"
+        422:
+          description: "Not all required attributes are given"
+
+  /stateHandler/deleteHistory/{deviceId}:
+    delete:
+      summary: "Delete the History of a medical device"
+      description: "Only possible if medical device has no state"
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The ID of the medical device"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      responses:
+        200:
+          description: "Success, history was deleted"
+          content:
+            application/json:
+              schema:
+                type: "string"
+                format: "uuid"
+                example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                description: "The ID of the medical device"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to delete history"
+        409:
+          description: "The medical device has a state"
+        422:
+          description: "Not all required attributes are given"
+
+  /stateHandler/changeState/{deviceId}:
+    post:
+      summary: "Change the state of a medical device"
+      description: ""
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The ID of the medical device"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: "string"
+                  example: "BOUGHT"
+                  description: "The new state of the new device (in caps)"
+      responses:
+        200:
+          description: "Success, state was removed"
+          content:
+            application/json:
+              schema:
+                type: "string"
+                format: "uuid"
+                example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                description: "The ID of the medical device"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to change state"
+        409:
+          description: "The medical device does not have a state or does not exist in medical device database"
+        422:
+          description: "Not all required attributes are given"
+
+  /stateHandler/setDefectPriority/{deviceId}:
+    post:
+      summary: "Set the defect priority of a medical device"
+      description: ""
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The ID of the medical device"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                defectPriority:
+                  type: "string"
+                  example: "MEDIUM"
+                  description: "The new defectPriority of the new device"
+      responses:
+        200:
+          description: "Success, defect priority was updated"
+          content:
+            application/json:
+              schema:
+                type: "string"
+                format: "uuid"
+                example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                description: "The ID of the medical device"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to set defect priority"
+        409:
+          description: "The medical device does not have a state or does not exist in medical device database"
+        422:
+          description: "Not all required attributes are given"
+
+  /stateHandler/setAvailabilityDate/{deviceId}:
+    post:
+      summary: "Set the availability date of a defect medical device"
+      description: ""
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The ID of the medical device"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                availabilityDate:
+                  type: "string"
+                  format: "date"
+                  description: "The new availability date of the new device"
+      responses:
+        200:
+          description: "Success, defect priority was updated"
+          content:
+            application/json:
+              schema:
+                type: "string"
+                format: "uuid"
+                example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                description: "The ID of the medical device"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to set availability date"
+        409:
+          description: "The medical device does not have a state or does not exist in medical device database"
+        422:
+          description: "Not all required attributes are given"
+
+  /stateHandler/addAdditionalinformation/{deviceId}:
+    post:
+      summary: "Adds additional inforamtion to the current state of a medical device"
+      description: ""
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The ID of the medical device"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                information:
+                  type: "string"
+                  example: "This is the information"
+                  description: "The additional information"
+      responses:
+        200:
+          description: "Success, state was removed"
+          content:
+            application/json:
+              schema:
+                type: "string"
+                format: "uuid"
+                example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                description: "The ID of the medical device"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to add additinal information"
+        409:
+          description: "The medical device does not have a state or does not exist in medical device database"
+        422:
+          description: "Not all required attributes are given"
+
+  /stateHandler/getState/{deviceId}:
+    get:
+      summary: "Returns the current state of a medical device"
+      description: ""
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The ID of the medical device"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      responses:
+        200:
+          description: "Success, initial device state was added"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deviceId:
+                    type: "string"
+                    format: "uuid"
+                    example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                    description: "The ID of the medical device"
+                  defectPriority:
+                    type: "string"
+                    example: "LOW"
+                    description: "Defect priority of the medical device"
+                  state:
+                    type: "string"
+                    example: "AVAILABLE"
+                    description: "Current state of the medical device"
+                  enteredBy:
+                    type: "string"
+                    format: "uuid"
+                    example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+                    description: "User who made the state transition in this state"
+                  enteredAt:
+                    type: "string"
+                    format: "date-time"
+                    description: "Date and time when this state was entered"
+                  availabilityDate:
+                    type: "string"
+                    format: "date"
+                    description: "Date when the medical device will be available again (only for states which can have an availabilityDate)"
+                  additionalInformation:
+                    type: "array"
+                    items:
+                      type: object
+                      properties:
+                        time:
+                          type: "string"
+                          format: "date-time"
+                          description: "Date and time when the information was added"
+                        user:
+                          type: "string"
+                          format: "uuid"
+                          description: "User who added the information"
+                        information:
+                          type: "string"
+                          example: "This is the information"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to get state"
+        409:
+          description: "The medical device does not exist in medical device database"
+        422:
+          description: "Not all required attributes are given"
+  /stateHandler/getPossibleNextStates/{deviceId}:
+    get:
+      summary: "Returns the possible next states"
+      description: "Depends on the medical device status and the user level of the user"
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The IDs of the medical devices"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      responses:
+        200:
+          description: "Success, initial device state was added"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+                  example: "AVAILABLE"
+                  description: "Name of the possible next states"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to get state"
+        409:
+          description: "The medical device does not exist in medical device database"
+  /stateHandler/showHistory/{deviceId}:
+    post:
+      summary: "Show the history of a medical device"
+      description: ""
+      parameters:
+        - in: path
+          name: "deviceId"
+          required: true
+          description: "The ID of the medical device"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                information:
+                  type: "string"
+                  example: "This is the information"
+                  description: "The additional information"
+                fromDate:
+                  type: "string"
+                  format: "date"
+                  description: "Gives history after this date (optional)"
+                toDate:
+                  type: "string"
+                  format: "date"
+                  description: "Gives history before this date (optional)"
+      responses:
+        200:
+          description: "History request was successful"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deviceId:
+                    type: "string"
+                    format: "uuid"
+                    example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                    description: "The ID of the medical device"
+                  states:
+                    type: "array"
+                    description: "List of requested states. Newest state is first element of the list, oldest is the last"
+                    items:
+                      type: object
+                      properties:
+                        state:
+                          type: "string"
+                          example: "AVAILABLE"
+                          description: "Current state of the medical device"
+                        enteredBy:
+                          type: "string"
+                          format: "uuid"
+                          example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+                          description: "User who made the state transition in this state"
+                        enteredAt:
+                          type: "string"
+                          format: "date-time"
+                          description: "Date and time when this state was entered"
+                        availabilityDate:
+                          type: "string"
+                          format: "date"
+                          description: "Date when the medical device will be available again (only for states which can have an availabilityDate)"
+                        additionalInformation:
+                          type: "array"
+                          items:
+                            type: object
+                            properties:
+                              time:
+                                type: "string"
+                                format: "date-time"
+                                description: "Date and time when the information was added"
+                              user:
+                                type: "string"
+                                format: "uuid"
+                                description: "User who added the information"
+                              information:
+                                type: "string"
+                                example: "This is the information"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to get history"
+        409:
+          description: "The medical device does not exist in medical device database"
+        422:
+          description: "Not all required attributes are given"
+  /stateHandler/getStatesByDeviceIds:
+    post:
+      summary: "Returns the the current states of the requested medical devices"
+      description: "Filters depending n input and returns the current states of the remaining medical devices"
+      parameters:
+        - in: query
+          name: "deviceIds"
+          required: true
+          description: "The IDs of the medical devices"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              format: "uuid"
+              example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+        - in: query
+          name: "userId"
+          required: true
+          description: "The ID of the user"
+          schema:
+            type: "string"
+            format: "uuid"
+            example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                states:
+                  type: "array"
+                  items:
+                    type: "string"
+                    example: "AVAILABLE"
+                    description: "Optional: filter by this state"
+                priority:
+                  type: "string"
+                  example: "MEDIUM"
+                  description: "Optional: filter by this priority"
+                from:
+                  type: "string"
+                  format: "date"
+                  description: "Optional: returns all devices with entering date after or equals this date"
+                to:
+                  type: "string"
+                  format: "date"
+                  description: "Optional: returns all devices with entering date before or equals this date"
+      responses:
+        200:
+          description: "Success, initial device state was added"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: object
+                  properties:
+                    deviceId:
+                      type: "string"
+                      format: "uuid"
+                      example: "8798816d-ee1b-47f6-864c-be302f5911ae"
+                      description: "The ID of the medical device"
+                    defectPriority:
+                      type: "string"
+                      example: "LOW"
+                      description: "Defect priority of the medical device"
+                    state:
+                      type: "string"
+                      example: "AVAILABLE"
+                      description: "Current state of the medical device"
+                    enteredBy:
+                      type: "string"
+                      format: "uuid"
+                      example: "a96a1236-3202-49d3-8b8a-8af01b0ccb53"
+                      description: "User who made the state transition in this state"
+                    enteredAt:
+                      type: "string"
+                      format: "date-time"
+                      description: "Date and time when this state was entered"
+                    availabilityDate:
+                      type: "string"
+                      format: "date"
+                      description: "Date when the medical device will be available again (only for states which can have an availabilityDate)"
+                    additionalInformation:
+                      type: "array"
+                      items:
+                        type: object
+                        properties:
+                          time:
+                            type: "string"
+                            format: "date-time"
+                            description: "Date and time when the information was added"
+                          user:
+                            type: "string"
+                            format: "uuid"
+                            description: "User who added the information"
+                          information:
+                            type: "string"
+                            example: "This is the information"
+        400:
+          description: "Bad request"
+        403:
+          description: "The given user does not exist or has not the permission to get state"
+        422:
+          description: "Not all required attributes are given"

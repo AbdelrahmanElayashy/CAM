@@ -1,0 +1,3 @@
+variables:
+    MVN_BUILD_CLI_OPTIONS: "-B -Dmaven.repo.local=.m2"
+    MVN_TEST_CLI_OPTIONS: "-B -Dmaven.repo.local=.m2"

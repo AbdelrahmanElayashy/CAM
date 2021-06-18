@@ -1,0 +1,158 @@
+
+
+<mat-divider></mat-divider>
+
+<div class="device-states-table">
+  <div >
+    <form>
+      Filter for:
+      <mat-form-field class="dropdown" appearance="fill">
+        <mat-label>Priority</mat-label>
+        <mat-select [(ngModel)]="this.selectedPrio" name="prio">
+          <mat-option (click)="this.selectedPrio = ''; this.ngOnInit()">-deselect-</mat-option>
+          <mat-option *ngFor="let prio of prios" [value]="prio.value"
+                      (click)="this.selectedPrio = prio.viewValue; this.ngOnInit()">
+            {{prio.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="dropdown" appearance="fill">
+        <mat-label>State</mat-label>
+        <mat-select [(ngModel)]="this.selectedState"
+                    name="state" multiple
+                    (selectionChange)="selectedState = $event.value.length == 0 ? null : $event.value; this.ngOnInit()">
+          <mat-option>-deselect-</mat-option>
+          <mat-option *ngFor="let state of states" [value]="state.value">
+            {{state.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="dropdown" appearance="fill">
+        <mat-label>From: Entering Date</mat-label>
+        <input matInput [matDatepicker]="picker_from"
+               (dateInput)="fromDate = helperService.applyDateFormat($event.value.toString(), helperService.DATE_FORMAT_API); this.ngOnInit()"
+               (dateChange)="fromDate = helperService.applyDateFormat($event.value.toString(), helperService.DATE_FORMAT_API); this.ngOnInit()">
+        <mat-datepicker-toggle matSuffix [for]="picker_from"></mat-datepicker-toggle>
+        <mat-datepicker #picker_from></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="dropdown" appearance="fill">
+        <mat-label>To: Entering Date</mat-label>
+        <input matInput [matDatepicker]="picker_to"
+               (dateInput)="toDate = helperService.applyDateFormat($event.value.toString(), helperService.DATE_FORMAT_API); this.ngOnInit()"
+               (dateChange)="toDate = helperService.applyDateFormat($event.value.toString(), helperService.DATE_FORMAT_API); this.ngOnInit()">
+        <mat-datepicker-toggle matSuffix [for]="picker_to"></mat-datepicker-toggle>
+        <mat-datepicker #picker_to></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-raised-button class="dropdown" (click)="selectedPrio = null; selectedState = null; fromDate = null; toDate = null; picker_from.select(null); picker_to.select(null);this.ngOnInit()">Clear Filter
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+
+    </form>
+  </div>
+
+
+  <mat-divider></mat-divider>
+
+
+  <table mat-table [dataSource]="dataSource"
+         matSort  matSortStart="desc"
+         multiTemplateDataRows
+         class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let device"> {{device.name}} </td>
+    </ng-container>
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="state">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th>
+      <td mat-cell *matCellDef="let device"> {{device.state}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="defectPriority">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Priority </th>
+      <td mat-cell *matCellDef="let device"> {{device.defectPriority}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="enteredAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Entering Date </th>
+      <td mat-cell *matCellDef="let device"> {{ helperService.applyDateFormat(device.enteredAt, helperService.DATE_FORMAT) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="enterTime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Entering Time </th>
+      <td mat-cell *matCellDef="let device"> {{ helperService.applyDateFormat(device.enteredAt, helperService.TIME_FORMAT) }}</td>
+    </ng-container>
+
+    <!-- Defect availibility Column -->
+    <ng-container matColumnDef="availabilityDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Available At </th>
+      <td mat-cell *matCellDef="let device"> {{ helperService.applyDateFormat(device.availableAt, helperService.DATE_FORMAT) }}</td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+<!--    <ng-container matColumnDef="actions">-->
+<!--      <th mat-header-cell *matHeaderCellDef> Actions </th>-->
+
+<!--      <td mat-cell *matCellDef="let device">-->
+<!--        <button mat-raised-button (click)="showHistory( device.deviceId )">Show History</button>-->
+<!--        <button *ngIf="device.showChangeStateButton" mat-raised-button (click)="openModal( device.deviceId )">Change State</button>-->
+<!--        <button mat-raised-button (click)="openPriorityModal( device.deviceId )">Change Priority</button>-->
+<!--        <button mat-raised-button (click)="openAddInfoModal( device.deviceId )">Add Information</button>-->
+<!--      </td>-->
+<!--    </ng-container>-->
+
+
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+        <div class="example-element-detail"
+             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <button class="row-button" color="" mat-stroked-button (click)="showHistory( element.deviceId )">Show History</button>
+          <button class="row-button" *ngIf="element.showChangeStateButton"  mat-stroked-button (click)="openModal( element.deviceId )">Change State</button>
+          <button class="row-button" mat-stroked-button (click)="openPriorityModal( element.deviceId )">Change Priority</button>
+          <button class="row-button" mat-stroked-button (click)="openAddInfoModal( element.deviceId )">Add Information</button>
+
+          <button class="row-button" *ngIf="element.addInitialStateButton" mat-stroked-button (click)="openAddInitalStateModal( element.deviceId )">Add Inital State</button>
+          <button class="row-button" *ngIf="element.removeStateButton" mat-stroked-button (click)="openRemoveStateModal( element.deviceId )">Remove State</button>
+          <button class="row-button" *ngIf="element.showChangeAvailabilityDate" mat-stroked-button (click)="openChangeAvailabilityDateModal( element.deviceId, element.availableAt )">Change Availability Date</button>
+        </div>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+    <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+        class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+
+
+<!--    &lt;!&ndash; Row shown when there is no matching data. &ndash;&gt;-->
+<!--    <tr class="mat-row" *matNoDataRow>-->
+<!--      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>-->
+<!--    </tr>-->
+
+  </table>
+
+  <mat-paginator [length]="2"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+
+
+
+</div>

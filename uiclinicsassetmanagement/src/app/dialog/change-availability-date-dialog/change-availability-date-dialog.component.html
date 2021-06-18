@@ -1,0 +1,32 @@
+
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">Change Availibility Date</h1>
+  </header>
+  <section id="modal-body">
+
+    <div>
+      <label>Current Date:</label>
+      <label id="currentDateLabel" style="margin-left: 30px;">{{data.currentDate}}</label>
+    </div>
+
+    <div style="display: flex;">
+
+      <label>New date:</label>
+
+      <div style="margin-left: 20px;">
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="data.newDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </section>
+  <footer id="modal-footer" style="    margin-top: 28px; text-align: right;">
+    <button mat-raised-button id="modal-cancel-button" style="margin-right: 20px;" (click)="closeModal()">Cancel</button>
+    <button mat-raised-button id="modal-action-button" (click)="actionFunction()">OK</button>
+  </footer>
+</div>
